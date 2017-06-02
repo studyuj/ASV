@@ -20,7 +20,7 @@
 % 
 % -----------------------------------------------------------------------------------------------
 
-function [D_out] = vl_asvcovdet(im, opt, frames_ori,des,isInter)
+function [D_out] = vl_asvcovdet(im, opt, frames_ori,des,isInter,paramA)
 
 nr = opt.nr;
 rc_min = opt.rc_min;
@@ -71,7 +71,7 @@ for rc = linspace(rc_min, rc_max, nr)
     % ------------------------------interpolation -----------------------------------
     if isInter == 1
         for in = 1:size(D,2)-1
-            tempIntep = (D(:,in,:) + D(:,in+1,:))/2;
+            tempIntep = (D(:,in,:) + D(:,in+1,:)+D(:,in+1,:))/3;
             D = cat(2,D,tempIntep);
         end
     end
@@ -92,7 +92,7 @@ for rc = linspace(rc_min, rc_max, nr)
             
             for t = 1:size(m,2)
                 
-                accVec = accVec + (M(:,t) <= m(t));
+                accVec = accVec + (M(:,t) <= paramA.*m(t));
                 
             end
             
